@@ -13,6 +13,12 @@ pipeline {
                sh "git clone https://github.com/patilsahana1234/hello-world-war_jenkins"
            }
         }
+        stage('Deploy') {
+             steps {
+               sh "cp target/hello-world-war_jenkins.war /opt/apache-tomcat-10.1.49/webapps/"
+           }
+        }
     }
 }
+
 
