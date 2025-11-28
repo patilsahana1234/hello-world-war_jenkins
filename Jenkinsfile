@@ -2,7 +2,7 @@ pipeline {
     // agent { label 'java' }
     agent none
     stages {
-        stage ('hello-world-war') {
+        stage('hello-world-war') {
         parallel {
         stage('checkout') {
             agent { label 'java' }
@@ -17,8 +17,7 @@ pipeline {
                sh "mvn clean package"
            }
         }
-        }
-        }
+        
         stage('Deploy') {
             agent { label 'java' }
              steps {
@@ -27,6 +26,8 @@ pipeline {
         }
     }
 }
+        }
+        }
 
 
 
