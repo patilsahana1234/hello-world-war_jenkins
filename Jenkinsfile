@@ -17,6 +17,8 @@ pipeline {
                sh "mvn clean package"
            }
         }
+        }
+        }
         stage('Deploy') {
             agent { label 'java' }
              steps {
@@ -25,8 +27,8 @@ pipeline {
         }
     }
 }
-}
-}
-}
+
+
+
 
 
