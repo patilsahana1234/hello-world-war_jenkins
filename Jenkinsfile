@@ -2,7 +2,7 @@ pipeline {
     // agent { label 'java' }
     agent none
     stages {
-        stage ('hello-world-war')
+        stage ('hello-world-war') {
         parallel {
         stage('checkout') {
             agent { label 'java' }
@@ -12,16 +12,19 @@ pipeline {
            }
         }
         stage('Build') {
+            agent { label 'java' }
              steps {
                sh "mvn clean package"
            }
         }
         stage('Deploy') {
+            agent { label 'java' }
              steps {
                sh "sudo cp /home/slave1/workspace/Jenkins_pipeline/target/hello-world-war-1.0.0.war /opt/apache-tomcat-11.0.14/webapps/"
            }
         }
     }
+}
 }
 }
 }
