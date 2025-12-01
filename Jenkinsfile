@@ -31,7 +31,7 @@ choice(name: 'cmd1', choices: ['install', 'compile'], description: 'Choose one o
         stage('Build') {
             agent { label 'java' }
              steps {
-               sh "mvn clean package"
+               sh "mvn $cmd $cmd1"
            }
         }
         
