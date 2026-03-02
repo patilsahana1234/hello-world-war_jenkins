@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: n8n
+  namespace: n8n
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: n8n
+  template:
+    metadata:
+      labels:
+        app: n8n
+    spec:
+      containers:
+      - name: n8n
+        image: n8nio/n8n:latest
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1500Mi"
+            cpu: "800m"
+        ports:
+        - containerPort: 5678
+        env:
+        - name: DB_TYPE
+          value: postgresdb
+        - name: DB_POSTGRESDB_HOST
+          value: postgres
+        - name: DB_POSTGRESDB_PORT
+          value: "5432"
+        - name: DB_POSTGRESDB_DATABASE
+          value: n8n
+        - name: DB_POSTGRESDB_USER
+          value: n8n
+        - name: DB_POSTGRESDB_PASSWORD
+          value: n8npass
+        - name: N8N_HOST
+          value: "52.66.231.199"
+        - name: N8N_PORT
+          value: "5678"
+        - name: N8N_PROTOCOL
+          value: "http"
+        - name: N8N_SECURE_COOKIE
+          value: "false"
+        - name: WEBHOOK_URL
+          value: "http://52.66.231.199:30080/"
+        - name: GENERIC_TIMEZONE
+          value: "Asia/Kolkata"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: n8n-service
+  namespace: n8n
+spec:
+  type: NodePort
+  selector:
+    app: n8n
+  ports:
+  - port: 80
+    targetPort: 5678
+    nodePort: 30080

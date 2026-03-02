@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: jenkins-daemonset
+spec:
+  selector:
+    matchLabels:
+      my-pod: webapp
+  template:
+    metadata:
+      labels:
+        my-pod: webapp
+    spec:
+      containers:
+        - name: jenkins
+          image: jenkins/jenkins:lts
+      tolerations:
+        - key: Colour
+          operator: "Equal"
+          value: sahana
+          effect: NoSchedule
