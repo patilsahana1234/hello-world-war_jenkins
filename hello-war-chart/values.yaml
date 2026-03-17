@@ -8,9 +8,4 @@ image:
 service:
   type: NodePort
   port: 8080
-  nodePort: 31898
-
-ingress:
-  enabled: false
-
-resources: {}
+  nodePort: 31900
