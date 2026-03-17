@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-hello-chart
+  labels:
+    app: {{ .Release.Name }}-hello-chart
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-hello-chart
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-hello-chart
+    spec:
+      containers:
+      - name: hello-world-war
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: 8080
