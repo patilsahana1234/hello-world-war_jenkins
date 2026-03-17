@@ -1,17 +1,24 @@
-# -------- Stage 1: Build WAR --------
-FROM maven:3.8.2-openjdk-8 AS mavenbuilder
+FROM jenkins/jenkins:lts
 
-WORKDIR /app
-COPY . .
-RUN mvn clean package -DskipTests
+USER root
 
-# -------- Stage 2: Tomcat Runtime --------
-FROM tomcat:9.0-jre8-temurin
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    docker.io \
+    curl \
+    maven \
+ && rm -rf /var/lib/apt/lists/*
 
-RUN rm -rf /usr/local/tomcat/webapps/*
+# Add Jenkins to Docker group
+RUN groupadd docker || true \
+ && usermod -aG docker jenkins
 
-COPY --from=mavenbuilder /app/target/*.war /usr/local/tomcat/webapps/ROOT.war
+# Install kubectl
+RUN curl -LO "https://dl.k8s.io/release/v1.30.0/bin/linux/amd64/kubectl" \
+ && install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl \
+ && rm kubectl
 
-EXPOSE 8080
+# Install Helm
+RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
-CMD ["catalina.sh", "run"]
+USER jenkins

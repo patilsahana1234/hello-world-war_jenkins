@@ -1,0 +1,16 @@
+replicaCount: 1
+
+image:
+  repository: docker.io/sahanasp123/hello-world-war
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+service:
+  type: NodePort
+  port: 8080
+  nodePort: 31898
+
+ingress:
+  enabled: false
+
+resources: {}
