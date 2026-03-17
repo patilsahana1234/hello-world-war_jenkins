@@ -1,24 +1,11 @@
-FROM jenkins/jenkins:lts
+FROM tomcat:9.0-jdk11
 
-USER root
+# Remove default webapps
+RUN rm -rf /usr/local/tomcat/webapps/*
 
-# Install dependencies
-RUN apt-get update && apt-get install -y \
-    docker.io \
-    curl \
-    maven \
- && rm -rf /var/lib/apt/lists/*
+# Copy WAR file
+COPY target/*.war /usr/local/tomcat/webapps/hello-world-war.war
 
-# Add Jenkins to Docker group
-RUN groupadd docker || true \
- && usermod -aG docker jenkins
+EXPOSE 8080
 
-# Install kubectl
-RUN curl -LO "https://dl.k8s.io/release/v1.30.0/bin/linux/amd64/kubectl" \
- && install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl \
- && rm kubectl
-
-# Install Helm
-RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
-
-USER jenkins
+CMD ["catalina.sh", "run"]
